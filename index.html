@@ -3,111 +3,87 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leon</title>
+<title>Obsidian Advertising</title>
 
 <style>
 body {
     margin: 0;
     height: 100vh;
     overflow: hidden;
-    background: black;
-    font-family: Arial, sans-serif;
+    background: #000;
     color: white;
+    font-family: Arial, sans-serif;
+    cursor: none;
 }
 
-/* 🌧️ canvas */
-canvas {
+/* 🌧️ rain canvas */
+#rain {
     position: absolute;
     top: 0;
     left: 0;
 }
 
-/* 🌫️ blur layer */
+/* 🌫️ blur + fog */
 .overlay {
     position: absolute;
     width: 100%;
     height: 100%;
     backdrop-filter: blur(10px);
-    background: rgba(0,0,0,0.45);
+    background: radial-gradient(circle at center, rgba(0,255,200,0.05), rgba(0,0,0,0.8));
+    z-index: 1;
 }
 
-/* 💀 main card */
-.card {
-    position: relative;
-    z-index: 2;
-    width: 320px;
-    padding: 20px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    text-align: center;
-    margin: auto;
+/* 💀 center content */
+.center {
+    position: absolute;
+    z-index: 3;
     top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0 0 25px rgba(0,255,200,0.08);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
-.pfp {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255,255,255,0.15);
-}
-
-/* 🟢 status dot */
-.status-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 6px;
-    box-shadow: 0 0 10px;
-}
-
-/* glow colors */
-.online { background: #2ecc71; box-shadow: 0 0 10px #2ecc71; }
-.idle { background: #f1c40f; box-shadow: 0 0 10px #f1c40f; }
-.dnd { background: #e74c3c; box-shadow: 0 0 10px #e74c3c; }
-.offline { background: #7f8c8d; box-shadow: 0 0 10px #7f8c8d; }
-
+/* 🔥 main title */
 h1 {
-    margin: 10px 0 5px;
-    font-size: 26px;
+    font-size: 48px;
+    letter-spacing: 8px;
+    margin: 0;
+    text-transform: uppercase;
+    animation: glow 2.5s infinite alternate;
 }
 
-#statusText {
-    font-size: 13px;
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(0,255,200,0.2); }
+    to { text-shadow: 0 0 30px rgba(0,255,200,0.7); }
+}
+
+/* 🧠 subtitle */
+p {
     color: #aaa;
-    height: 18px;
+    font-size: 13px;
+    margin-top: 10px;
 }
 
-.activity {
-    font-size: 12px;
-    color: #00ffc8;
-    margin-top: 5px;
+/* ⚡ scanlines */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.03),
+        rgba(255,255,255,0.03) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    pointer-events: none;
+    z-index: 2;
 }
 
-/* buttons */
-a {
-    display: block;
-    margin: 8px auto;
-    width: 200px;
-    padding: 10px;
-    text-decoration: none;
-    color: white;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.15);
-    transition: 0.25s;
-}
-
-a:hover {
-    background: rgba(0,255,200,0.15);
-    transform: scale(1.05);
-}
-
-/* ⚡ glitch intro */
+/* ⚡ intro glitch */
 #intro {
     position: fixed;
     width: 100%;
@@ -117,126 +93,64 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 22px;
-    letter-spacing: 3px;
+    font-size: 20px;
+    letter-spacing: 5px;
     animation: glitch 1s infinite;
 }
 
 @keyframes glitch {
-    0% { opacity: 1; transform: translate(0); }
+    0% { transform: translate(0); opacity: 1; }
     20% { transform: translate(-2px,2px); }
     40% { transform: translate(2px,-2px); }
     60% { transform: translate(-1px,1px); }
-    80% { opacity: 0.8; }
-    100% { opacity: 1; }
+    100% { transform: translate(0); opacity: 0.9; }
+}
+
+/* 🖱️ cursor trail */
+.trail {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(0,255,200,0.8);
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(0,255,200,0.7);
+    animation: fade 0.8s linear forwards;
+}
+
+@keyframes fade {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.2); }
+}
+
+/* 🧠 hidden system feed */
+.feed {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 11px;
+    color: rgba(0,255,200,0.5);
+    z-index: 3;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ⚡ INTRO -->
-<div id="intro">LOADING PROFILE...</div>
+<div id="intro">BOOTING OBSIDIAN SYSTEM...</div>
 
 <canvas id="rain"></canvas>
 <div class="overlay"></div>
 
-<div class="card">
-    <img id="avatar" class="pfp">
-    <h1 id="name">Loading...</h1>
-
-    <div>
-        <span id="dot" class="status-dot offline"></span>
-        <span id="statusText">Connecting...</span>
-    </div>
-
-    <div class="activity" id="activity"></div>
-
-    <a href="https://discord.gg/jfzVYKyBPe" target="_blank">
-        Discord Invite: Obsidian Advertising
-    </a>
-
-    <a href="https://github.com" target="_blank">GitHub</a>
+<div class="center">
+    <h1>OBSIDIAN ADVERTISING</h1>
+    <p>digital identity engineering</p>
 </div>
 
+<div class="feed" id="feed"></div>
+
 <script>
-const USER_ID = "618051457236598785";
-
-/* typing animation */
-let typingIndex = 0;
-let typingText = "";
-let typingSpeed = 40;
-
-function type(text) {
-    typingText = "";
-    typingIndex = 0;
-    clearInterval(window.typingInterval);
-
-    window.typingInterval = setInterval(() => {
-        typingText += text[typingIndex];
-        document.getElementById("statusText").innerText = typingText;
-        typingIndex++;
-
-        if (typingIndex >= text.length) {
-            clearInterval(window.typingInterval);
-        }
-    }, typingSpeed);
-}
-
-/* status logic */
-function setStatus(status) {
-    const dot = document.getElementById("dot");
-
-    dot.className = "status-dot " + status;
-
-    if (status === "online") type("Leon is online and active...");
-    if (status === "idle") type("Leon is away right now...");
-    if (status === "dnd") type("Leon is busy. Do not disturb.");
-    if (status === "offline") type("Leon is currently offline.");
-}
-
-/* fetch discord */
-async function load() {
-    try {
-        const res = await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
-        const json = await res.json();
-        const d = json.data;
-
-        // avatar
-        const avatar = d.discord_user.avatar
-            ? `https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`
-            : `https://cdn.discordapp.com/embed/avatars/0.png`;
-
-        document.getElementById("avatar").src = avatar;
-
-        // name
-        document.getElementById("name").innerText =
-            d.discord_user.global_name || d.discord_user.username;
-
-        // status
-        setStatus(d.discord_status);
-
-        // activity
-        if (d.activities && d.activities.length > 0) {
-            document.getElementById("activity").innerText =
-                "Playing: " + d.activities[0].name;
-        } else {
-            document.getElementById("activity").innerText = "";
-        }
-
-    } catch (e) {
-        setStatus("offline");
-    }
-}
-
-load();
-
-/* hide intro */
-setTimeout(() => {
-    document.getElementById("intro").style.display = "none";
-}, 1500);
-
-/* rain */
+/* 🌧️ rain system */
 const canvas = document.getElementById("rain");
 const ctx = canvas.getContext("2d");
 
@@ -245,7 +159,7 @@ canvas.height = window.innerHeight;
 
 let drops = [];
 
-for (let i = 0; i < 120; i++) {
+for (let i = 0; i < 140; i++) {
     drops.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -257,6 +171,7 @@ for (let i = 0; i < 120; i++) {
 function rain() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.strokeStyle = "rgba(0,255,200,0.12)";
+    ctx.lineWidth = 1;
 
     for (let d of drops) {
         ctx.beginPath();
@@ -273,8 +188,39 @@ function rain() {
 
     requestAnimationFrame(rain);
 }
-
 rain();
+
+/* ⚡ intro remove */
+setTimeout(() => {
+    document.getElementById("intro").style.display = "none";
+}, 1500);
+
+/* 🖱️ cursor trail */
+document.addEventListener("mousemove", e => {
+    const dot = document.createElement("div");
+    dot.className = "trail";
+    dot.style.left = e.clientX + "px";
+    dot.style.top = e.clientY + "px";
+
+    document.body.appendChild(dot);
+
+    setTimeout(() => dot.remove(), 800);
+});
+
+/* 🧠 fake system feed */
+const messages = [
+    "initializing identity layer...",
+    "syncing obisidian nodes...",
+    "rendering interface...",
+    "applying aesthetic protocol...",
+    "connection stable."
+];
+
+let i = 0;
+setInterval(() => {
+    document.getElementById("feed").innerText = messages[i % messages.length];
+    i++;
+}, 2000);
 </script>
 
 </body>
