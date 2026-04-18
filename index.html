@@ -18,81 +18,69 @@ body {
     align-items: center;
 }
 
-/* 🌧️ Rain canvas */
 canvas {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 0;
 }
 
-/* 🌫️ blur overlay */
 .overlay {
     position: absolute;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(6px);
-    background: rgba(0,0,0,0.4);
-    z-index: 1;
+    backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.45);
 }
 
-/* main container */
 .container {
     position: relative;
     z-index: 2;
     text-align: center;
 }
 
-/* profile picture */
 .pfp {
     width: 110px;
     height: 110px;
     border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.15);
+    margin-bottom: 10px;
     object-fit: cover;
-    border: 2px solid rgba(255,255,255,0.2);
-    box-shadow: 0 0 20px rgba(0,255,200,0.2);
-    margin-bottom: 15px;
 }
 
-/* name */
 h1 {
-    margin: 0;
-    font-size: 38px;
+    margin: 5px;
+    font-size: 34px;
     letter-spacing: 2px;
 }
 
-/* quote */
-p {
+.status {
+    font-size: 13px;
     color: #aaa;
-    font-size: 14px;
-    margin-top: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 6px;
 }
 
-/* buttons */
+.activity {
+    font-size: 12px;
+    color: #00ffc3;
+    margin-bottom: 15px;
+}
+
 a {
     display: block;
-    margin: 10px auto;
+    margin: 8px auto;
     width: 180px;
     padding: 10px;
     text-decoration: none;
     color: white;
-    border: 1px solid rgba(255,255,255,0.2);
     border-radius: 10px;
     background: rgba(255,255,255,0.05);
-    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: 0.25s;
 }
 
 a:hover {
     background: rgba(0,255,200,0.15);
-    box-shadow: 0 0 15px rgba(0,255,200,0.3);
     transform: scale(1.05);
-}
-
-footer {
-    margin-top: 15px;
-    font-size: 12px;
-    color: #555;
 }
 </style>
 </head>
@@ -103,21 +91,58 @@ footer {
 <div class="overlay"></div>
 
 <div class="container">
-    <!-- 🖼️ YOUR PFP -->
-    <img src="pfp.png" class="pfp" alt="pfp">
+    <img id="avatar" class="pfp" src="" />
+    <h1 id="name">Loading...</h1>
 
-    <h1>LEON</h1>
-    <p>"building in silence"</p>
+    <div class="status" id="status">Fetching status...</div>
+    <div class="activity" id="activity">...</div>
 
     <a href="https://discord.com" target="_blank">Discord</a>
     <a href="https://github.com" target="_blank">GitHub</a>
-    <a href="#">Custom Link</a>
-
-    <footer>leon6454.github.io</footer>
 </div>
 
 <script>
-/* 🌧️ simple rain effect */
+const USER_ID = "618051457236598785";
+
+async function load() {
+    try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
+        const json = await res.json();
+        const d = json.data;
+
+        // avatar
+        const avatarURL = d.discord_user.avatar
+            ? `https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`
+            : `https://cdn.discordapp.com/embed/avatars/0.png`;
+
+        document.getElementById("avatar").src = avatarURL;
+
+        // username
+        document.getElementById("name").innerText =
+            d.discord_user.global_name || d.discord_user.username;
+
+        // status
+        document.getElementById("status").innerText =
+            "Status: " + d.discord_status;
+
+        // activity
+        if (d.activities && d.activities.length > 0) {
+            document.getElementById("activity").innerText =
+                "Playing: " + d.activities[0].name;
+        } else {
+            document.getElementById("activity").innerText =
+                "No activity";
+        }
+
+    } catch (e) {
+        document.getElementById("status").innerText =
+            "Failed to load Discord status";
+    }
+}
+
+load();
+
+/* 🌧️ Rain effect */
 const canvas = document.getElementById("rain");
 const ctx = canvas.getContext("2d");
 
@@ -130,25 +155,23 @@ for (let i = 0; i < 120; i++) {
     drops.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        length: Math.random() * 20 + 10,
-        speed: Math.random() * 5 + 2
+        l: Math.random() * 20 + 10,
+        s: Math.random() * 5 + 2
     });
 }
 
 function rain() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = "rgba(0,255,200,0.15)";
+    ctx.strokeStyle = "rgba(0,255,200,0.12)";
     ctx.lineWidth = 1;
 
-    for (let i = 0; i < drops.length; i++) {
-        let d = drops[i];
+    for (let d of drops) {
         ctx.beginPath();
         ctx.moveTo(d.x, d.y);
-        ctx.lineTo(d.x, d.y + d.length);
+        ctx.lineTo(d.x, d.y + d.l);
         ctx.stroke();
 
-        d.y += d.speed;
-
+        d.y += d.s;
         if (d.y > canvas.height) {
             d.y = -20;
             d.x = Math.random() * canvas.width;
