@@ -8,219 +8,161 @@
 <style>
 body {
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
-    background: #000;
-    color: white;
-    font-family: Arial, sans-serif;
-    cursor: none;
-}
-
-/* 🌧️ rain canvas */
-#rain {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-/* 🌫️ blur + fog */
-.overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(10px);
-    background: radial-gradient(circle at center, rgba(0,255,200,0.05), rgba(0,0,0,0.8));
-    z-index: 1;
-}
-
-/* 💀 center content */
-.center {
-    position: absolute;
-    z-index: 3;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-/* 🔥 main title */
-h1 {
-    font-size: 48px;
-    letter-spacing: 8px;
-    margin: 0;
-    text-transform: uppercase;
-    animation: glow 2.5s infinite alternate;
-}
-
-@keyframes glow {
-    from { text-shadow: 0 0 10px rgba(0,255,200,0.2); }
-    to { text-shadow: 0 0 30px rgba(0,255,200,0.7); }
-}
-
-/* 🧠 subtitle */
-p {
-    color: #aaa;
-    font-size: 13px;
-    margin-top: 10px;
-}
-
-/* ⚡ scanlines */
-body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        to bottom,
-        rgba(255,255,255,0.03),
-        rgba(255,255,255,0.03) 1px,
-        transparent 1px,
-        transparent 3px
-    );
-    pointer-events: none;
-    z-index: 2;
-}
-
-/* ⚡ intro glitch */
-#intro {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
-    z-index: 999;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 20px;
-    letter-spacing: 5px;
-    animation: glitch 1s infinite;
+    background: #0b0f14;
+    font-family: Arial, sans-serif;
+    color: white;
 }
 
-@keyframes glitch {
-    0% { transform: translate(0); opacity: 1; }
-    20% { transform: translate(-2px,2px); }
-    40% { transform: translate(2px,-2px); }
-    60% { transform: translate(-1px,1px); }
-    100% { transform: translate(0); opacity: 0.9; }
-}
-
-/* 🖱️ cursor trail */
-.trail {
+/* background */
+.background {
     position: fixed;
-    width: 8px;
-    height: 8px;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top, rgba(0,255,200,0.08), transparent 60%),
+                radial-gradient(circle at bottom, rgba(120,120,255,0.06), transparent 60%);
+    z-index: 0;
+}
+
+/* layout */
+.container {
+    z-index: 2;
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    text-align: center;
+}
+
+/* title */
+h1 {
+    font-size: 46px;
+    letter-spacing: 6px;
+    margin: 0;
+}
+
+/* subtitle */
+.sub {
+    color: #aab3c0;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* sections */
+.section {
+    margin-top: 30px;
+}
+
+/* button */
+.button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    color: white;
+    background: rgba(0,255,200,0.12);
+    border: 1px solid rgba(0,255,200,0.4);
+    transition: 0.2s;
+}
+
+.button:hover {
+    background: rgba(0,255,200,0.25);
+    transform: translateY(-2px);
+}
+
+/* profile card */
+.card {
+    margin: 30px auto;
+    width: 280px;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.pfp {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background: rgba(0,255,200,0.8);
-    pointer-events: none;
-    box-shadow: 0 0 12px rgba(0,255,200,0.7);
-    animation: fade 0.8s linear forwards;
+    margin-bottom: 10px;
 }
 
-@keyframes fade {
-    from { opacity: 1; transform: scale(1); }
-    to { opacity: 0; transform: scale(0.2); }
+.role {
+    font-size: 12px;
+    color: #00ffc8;
+    margin-top: 5px;
 }
 
-/* 🧠 hidden system feed */
-.feed {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    font-size: 11px;
-    color: rgba(0,255,200,0.5);
-    z-index: 3;
+.status {
+    font-size: 12px;
+    color: #aaa;
 }
 </style>
 </head>
 
 <body>
 
-<div id="intro">BOOTING OBSIDIAN SYSTEM...</div>
+<div class="background"></div>
 
-<canvas id="rain"></canvas>
-<div class="overlay"></div>
+<div class="container">
 
-<div class="center">
     <h1>OBSIDIAN ADVERTISING</h1>
-    <p>digital identity engineering</p>
+
+    <div class="sub">
+        A place to advertise, promote, and grow digital presence.
+    </div>
+
+    <div class="section">
+        <p><b>We are hiring</b> — open applications for staff, advertisers, and partners.</p>
+        <p>Join Obsidian Advertising and become part of a growing network.</p>
+
+        <a class="button" href="https://discord.gg/jfzVYKyBPe" target="_blank">
+            Apply / Join Discord
+        </a>
+    </div>
+
+    <!-- DISCORD PROFILE CARD -->
+    <div class="card">
+        <img id="avatar" class="pfp" src="">
+        <div id="name">Loading...</div>
+        <div class="role">Chief Operations Officer</div>
+        <div class="status" id="status">Checking status...</div>
+    </div>
+
 </div>
 
-<div class="feed" id="feed"></div>
-
 <script>
-/* 🌧️ rain system */
-const canvas = document.getElementById("rain");
-const ctx = canvas.getContext("2d");
+const USER_ID = "618051457236598785";
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+async function load() {
+    try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
+        const json = await res.json();
+        const d = json.data;
 
-let drops = [];
+        const avatar = d.discord_user.avatar
+            ? `https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`
+            : `https://cdn.discordapp.com/embed/avatars/0.png`;
 
-for (let i = 0; i < 140; i++) {
-    drops.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        l: Math.random() * 20 + 10,
-        s: Math.random() * 5 + 2
-    });
-}
+        document.getElementById("avatar").src = avatar;
 
-function rain() {
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.strokeStyle = "rgba(0,255,200,0.12)";
-    ctx.lineWidth = 1;
+        document.getElementById("name").innerText =
+            d.discord_user.global_name || d.discord_user.username;
 
-    for (let d of drops) {
-        ctx.beginPath();
-        ctx.moveTo(d.x,d.y);
-        ctx.lineTo(d.x,d.y + d.l);
-        ctx.stroke();
+        document.getElementById("status").innerText =
+            "Status: " + d.discord_status;
 
-        d.y += d.s;
-        if (d.y > canvas.height) {
-            d.y = -20;
-            d.x = Math.random() * canvas.width;
-        }
+    } catch (e) {
+        document.getElementById("status").innerText =
+            "Status: offline";
     }
-
-    requestAnimationFrame(rain);
 }
-rain();
 
-/* ⚡ intro remove */
-setTimeout(() => {
-    document.getElementById("intro").style.display = "none";
-}, 1500);
-
-/* 🖱️ cursor trail */
-document.addEventListener("mousemove", e => {
-    const dot = document.createElement("div");
-    dot.className = "trail";
-    dot.style.left = e.clientX + "px";
-    dot.style.top = e.clientY + "px";
-
-    document.body.appendChild(dot);
-
-    setTimeout(() => dot.remove(), 800);
-});
-
-/* 🧠 fake system feed */
-const messages = [
-    "initializing identity layer...",
-    "syncing obisidian nodes...",
-    "rendering interface...",
-    "applying aesthetic protocol...",
-    "connection stable."
-];
-
-let i = 0;
-setInterval(() => {
-    document.getElementById("feed").innerText = messages[i % messages.length];
-    i++;
-}, 2000);
+load();
 </script>
 
 </body>
