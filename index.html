@@ -29,21 +29,21 @@ body{
     display:flex;
 }
 
-/* ===== SIDEBAR ===== */
+/* SIDEBAR */
 .sidebar{
-    width:80px;
+    width:70px;
     background:#0b0f14;
     display:flex;
     flex-direction:column;
     align-items:center;
     padding:12px 0;
-    gap:12px;
+    gap:10px;
     border-right:1px solid rgba(255,255,255,0.05);
 }
 
 .server{
-    width:45px;
-    height:45px;
+    width:42px;
+    height:42px;
     border-radius:50%;
     background:rgba(255,255,255,0.08);
     display:flex;
@@ -52,22 +52,23 @@ body{
     cursor:pointer;
     transition:.2s;
     font-size:18px;
+    color:white;
 }
 
 .server:hover{
-    transform:scale(1.1);
+    transform:scale(1.08);
     background:rgba(0,255,200,0.2);
 }
 
-/* ===== MAIN AREA ===== */
+/* MAIN */
 .main{
     flex:1;
     display:flex;
 }
 
-/* ===== CHANNEL PANEL ===== */
+/* CHANNELS */
 .channels{
-    width:200px;
+    width:210px;
     background:var(--panel2);
     padding:12px;
     border-right:1px solid rgba(255,255,255,0.05);
@@ -92,14 +93,14 @@ body{
     color:var(--accent);
 }
 
-/* ===== CONTENT ===== */
+/* CONTENT */
 .content{
     flex:1;
     padding:20px;
     position:relative;
 }
 
-/* panels */
+/* PANELS */
 .panel{
     position:absolute;
     width:100%;
@@ -116,7 +117,7 @@ body{
     pointer-events:auto;
 }
 
-/* ===== PROFILE CARD ===== */
+/* CARD */
 .card{
     width:320px;
     background:var(--panel);
@@ -125,7 +126,7 @@ body{
     border:1px solid rgba(255,255,255,0.06);
 }
 
-/* avatar */
+/* AVATAR */
 .avatar-wrap{
     position:relative;
     width:90px;
@@ -138,12 +139,10 @@ body{
     border-radius:50%;
 }
 
-/* glow ring */
 .ring{
     position:absolute;
     inset:-4px;
     border-radius:50%;
-    border:2px solid transparent;
     animation:pulse 2s infinite;
 }
 
@@ -159,7 +158,7 @@ body{
     font-weight:bold;
 }
 
-/* status */
+/* STATUS */
 .status{
     font-size:13px;
     color:var(--muted);
@@ -176,11 +175,11 @@ body{
 }
 
 .online{background:#2ecc71;}
-.idle{background:#f1c40f;}
-.dnd{background:#e74c3c;}
-.offline{background:#7f8c8d;}
+idle{background:#f1c40f;}
+dnd{background:#e74c3c;}
+offline{background:#7f8c8d;}
 
-/* ===== SPOTIFY ===== */
+/* SPOTIFY */
 .spotify{
     margin-top:15px;
     display:flex;
@@ -220,11 +219,11 @@ body{
     transition:.3s;
 }
 
-/* ===== LINKS ===== */
+/* LINKS */
 .link{
     display:flex;
     align-items:center;
-    gap:8px;
+    justify-content:center;
     padding:12px;
     margin-top:10px;
     background:rgba(255,255,255,0.04);
@@ -238,34 +237,39 @@ body{
     transform:translateY(-2px);
     background:rgba(0,255,200,0.15);
 }
+
+/* ALWAYS CONTENT BOX */
+.always{
+    margin-top:15px;
+    padding:10px;
+    font-size:12px;
+    color:var(--muted);
+    background:rgba(255,255,255,0.03);
+    border-radius:10px;
+}
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-    <div class="server" onclick="switchTab(0)">👤</div>
-    <div class="server" onclick="switchTab(1)">🎵</div>
-    <div class="server" onclick="switchTab(2)">🔗</div>
+    <div class="server" onclick="switchTab(0)">P</div>
+    <div class="server" onclick="switchTab(1)">A</div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-    <!-- CHANNEL LIST -->
     <div class="channels">
         <div class="channel active" onclick="switchTab(0)">Profile</div>
         <div class="channel" onclick="switchTab(1)">Activity</div>
-        <div class="channel" onclick="switchTab(2)">Links</div>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
 
         <!-- PROFILE -->
         <div class="panel active">
             <div class="card">
+
                 <div class="avatar-wrap">
                     <div class="ring"></div>
                     <img id="avatar" class="avatar">
@@ -275,21 +279,28 @@ body{
 
                 <div class="status">
                     <div id="dot" class="dot offline"></div>
-                    <span id="statusText">Loading status</span>
+                    <span id="statusText">Loading</span>
                 </div>
+
+                <!-- LINKS MOVED HERE -->
+                <a class="link" href="https://github.com/Leon6454" target="_blank">GitHub</a>
+                <a class="link" href="https://www.roblox.com/users/1083628572/profile" target="_blank">Roblox</a>
+                <a class="link" href="https://discord.gg/jfzVYKyBPe" target="_blank">Discord Server</a>
+
+                <div class="always">
+                    Obsidian Advertising • Always recruiting and active
+                </div>
+
             </div>
         </div>
 
-        <!-- ACTIVITY -->
+        <!-- ACTIVITY (ALWAYS SOMETHING SHOWN) -->
         <div class="panel">
             <div id="spotify"></div>
-        </div>
 
-        <!-- LINKS -->
-        <div class="panel">
-            <a class="link" href="https://github.com/Leon6454" target="_blank">💻 GitHub</a>
-            <a class="link" href="https://www.roblox.com/users/1083628572/profile" target="_blank">🎮 Roblox</a>
-            <a class="link" href="https://discord.gg/jfzVYKyBPe" target="_blank">💬 Discord Server</a>
+            <div class="always" id="fallback">
+                No Spotify activity right now • Still online and active
+            </div>
         </div>
 
     </div>
@@ -311,9 +322,7 @@ function switchTab(i){
 
 /* status */
 function setStatus(s){
-    const dot=document.getElementById("dot");
-
-    dot.className="dot "+s;
+    document.getElementById("dot").className="dot "+s;
 
     if(s==="online")document.getElementById("statusText").innerText="Online";
     else if(s==="idle")document.getElementById("statusText").innerText="Idle";
@@ -335,8 +344,11 @@ async function load(){
     setStatus(d.discord_status);
 
     const sp=document.getElementById("spotify");
+    const fb=document.getElementById("fallback");
 
     if(d.listening_to_spotify){
+        fb.style.display="none";
+
         const song=d.spotify.song;
         const artist=d.spotify.artist;
         const album=d.spotify.album;
@@ -363,6 +375,10 @@ async function load(){
             const p=((now-start)/(end-start))*100;
             bar.style.width=p+"%";
         },500);
+
+    } else {
+        sp.innerHTML="";
+        fb.style.display="block";
     }
 }
 
