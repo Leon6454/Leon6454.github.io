@@ -6,176 +6,250 @@
 <title>Leon</title>
 
 <style>
+:root{
+    --bg:#0b0f14;
+}
+
+*{
+    box-sizing:border-box;
+}
+
 body {
     margin: 0;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #0b0f14;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: var(--bg);
     font-family: Arial, sans-serif;
-    color: white;
+    color:white;
+    overflow:hidden;
 }
 
+/* 🌫️ animated background */
 .bg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position:absolute;
+    width:100%;
+    height:100%;
+    transition:1s ease;
     background: radial-gradient(circle at center, rgba(0,255,200,0.08), transparent 60%);
 }
 
+/* ✨ card */
 .card {
-    position: relative;
-    z-index: 2;
-    width: 340px;
-    padding: 25px;
-    border-radius: 14px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    text-align: center;
+    position:relative;
+    z-index:2;
+    width:340px;
+    padding:25px;
+    border-radius:16px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+
+    text-align:center;
+
+    opacity:0;
+    transform:translateY(10px) scale(0.98);
+    animation:fadeIn .8s ease forwards;
+
+    transition: transform .25s ease, box-shadow .25s ease;
+    will-change: transform;
 }
 
-.pfp {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    margin-bottom: 10px;
+/* 💀 3D hover depth */
+.card:hover{
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
 }
 
-h1 {
-    margin: 5px 0;
-    font-size: 22px;
+@keyframes fadeIn{
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+/* 👤 avatar */
+.pfp{
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    margin-bottom:10px;
+    transition:.3s ease;
+}
+
+/* glow states */
+.online-glow{box-shadow:0 0 20px #2ecc71;}
+.idle-glow{box-shadow:0 0 20px #f1c40f;}
+.dnd-glow{box-shadow:0 0 20px #e74c3c;}
+.offline-glow{box-shadow:0 0 10px #7f8c8d;}
+
+h1{
+    margin:5px 0;
+    font-size:22px;
 }
 
 /* STATUS */
-.status {
-    font-size: 13px;
-    margin-bottom: 10px;
+.status{
+    font-size:13px;
+    margin-bottom:10px;
 }
 
-.online-text { color: #2ecc71; }
-.idle-text { color: #f1c40f; }
-.dnd-text { color: #e74c3c; }
-.offline-text { color: #7f8c8d; }
+.online-text{color:#2ecc71;}
+.idle-text{color:#f1c40f;}
+.dnd-text{color:#e74c3c;}
+.offline-text{color:#7f8c8d;}
 
-.dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 6px;
+.dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    display:inline-block;
+    margin-right:6px;
 }
 
-.online { background: #2ecc71; }
-.idle { background: #f1c40f; }
-.dnd { background: #e74c3c; }
-.offline { background: #7f8c8d; }
+.online{background:#2ecc71;}
+.idle{background:#f1c40f;}
+.dnd{background:#e74c3c;}
+.offline{background:#7f8c8d;}
 
 /* typing dots */
-.dots span {
-    display: inline-block;
-    width: 4px;
-    height: 4px;
-    margin: 0 2px;
-    background: currentColor;
-    border-radius: 50%;
-    animation: bounce 1.2s infinite;
+.dots span{
+    display:inline-block;
+    width:4px;
+    height:4px;
+    margin:0 2px;
+    background:currentColor;
+    border-radius:50%;
+    animation:bounce 1.2s infinite ease-in-out;
 }
-.dots span:nth-child(2){animation-delay:0.2s;}
-.dots span:nth-child(3){animation-delay:0.4s;}
 
-@keyframes bounce {
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+
+@keyframes bounce{
     0%,80%,100%{transform:translateY(0);}
     40%{transform:translateY(-6px);}
 }
 
-/* 🎵 SPOTIFY ROW */
-.spotify {
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(255,255,255,0.03);
-    padding: 10px;
-    border-radius: 10px;
+/* 🎵 spotify */
+.spotify{
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.03);
 }
 
-/* left text */
-.sp-text {
-    text-align: left;
-    font-size: 13px;
+.sp-text{
+    text-align:left;
+    font-size:12px;
+    line-height:1.35;
 }
 
-.sp-text a {
-    display: block;
-    color: #ddd;
-    text-decoration: none;
-    margin: 2px 0;
+/* hierarchy */
+.sp-text .artist{font-size:13px;font-weight:600;color:#fff;}
+.sp-text .song{color:#ccc;}
+.sp-text .album{font-size:11px;color:#888;}
+
+.sp-text a{
+    text-decoration:none;
+    display:block;
+    transition:.2s ease;
 }
 
-.sp-text a:hover {
-    color: #00ffc8;
+.sp-text a:hover{
+    color:#00ffc8;
 }
 
-/* album cover */
-.sp-img {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
+/* album */
+.sp-img{
+    width:52px;
+    height:52px;
+    border-radius:10px;
+    flex-shrink:0;
 }
 
-/* progress bar */
-.progress {
-    height: 4px;
-    background: rgba(255,255,255,0.1);
-    margin-top: 6px;
-    border-radius: 5px;
-    overflow: hidden;
+/* progress */
+.progress{
+    height:3px;
+    margin-top:5px;
+    background:rgba(255,255,255,0.1);
+    border-radius:5px;
+    overflow:hidden;
 }
 
-.progress-bar {
-    height: 100%;
-    background: #00ffc8;
-    width: 0%;
+.progress-bar{
+    height:100%;
+    background:#00ffc8;
+    width:0%;
+    transition:width .5s linear;
 }
 
-/* BUTTONS */
-.button {
-    display: block;
-    margin-top: 10px;
-    padding: 12px;
-    border-radius: 8px;
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.15);
-    transition: 0.2s;
+/* 🔗 LINKS */
+.button{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    margin-top:10px;
+    padding:12px;
+    border-radius:10px;
+
+    text-decoration:none;
+    color:white;
+    font-size:14px;
+
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.15);
+
+    transition:.25s ease;
+    transform:translateZ(0);
 }
 
-.button:hover {
-    background: rgba(0,255,200,0.15);
-    transform: translateY(-2px);
+/* hover depth */
+.button:hover{
+    transform:translateY(-3px) scale(1.02);
+    background:rgba(0,255,200,0.12);
 }
 
-/* MAIN CTA */
-.main-btn {
-    background: linear-gradient(90deg, #00ffc8, #00bfff);
-    box-shadow: 0 0 15px rgba(0,255,200,0.5);
-    animation: pulse 2s infinite;
+/* icons */
+.icon{
+    opacity:.9;
 }
 
-@keyframes pulse {
-    0% { box-shadow: 0 0 10px rgba(0,255,200,0.4); }
-    50% { box-shadow: 0 0 25px rgba(0,255,200,0.9); }
-    100% { box-shadow: 0 0 10px rgba(0,255,200,0.4); }
+/* main CTA */
+.main-btn{
+    background:linear-gradient(90deg,#00ffc8,#00bfff);
+    animation:pulse 2.5s infinite ease-in-out;
+}
+
+@keyframes pulse{
+    0%{box-shadow:0 0 10px rgba(0,255,200,0.4);}
+    50%{box-shadow:0 0 30px rgba(0,255,200,0.9);}
+    100%{box-shadow:0 0 10px rgba(0,255,200,0.4);}
+}
+
+/* 📱 mobile optimization */
+@media (max-width:420px){
+    .card{
+        width:92%;
+        padding:20px;
+    }
+
+    .spotify{
+        flex-direction:row;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
+<div class="bg" id="bg"></div>
 
 <div class="card">
     <img id="avatar" class="pfp">
@@ -187,92 +261,112 @@ h1 {
         <span class="dots"><span></span><span></span><span></span></span>
     </div>
 
-    <!-- SPOTIFY -->
     <div id="spotify"></div>
 
-    <!-- LINKS -->
     <a class="button" href="https://www.roblox.com/users/1083628572/profile" target="_blank">
-        Roblox Profile
+        <span class="icon">🎮</span> Roblox
     </a>
 
     <a class="button" href="https://github.com/Leon6454" target="_blank">
-        GitHub
+        <span class="icon">💻</span> GitHub
     </a>
 
     <a class="button main-btn" href="https://discord.gg/jfzVYKyBPe" target="_blank">
-        Join Advertising Server
+        <span class="icon">💬</span> Join Advertising Server
     </a>
 </div>
 
 <script>
-const USER_ID = "618051457236598785";
+const USER_ID="618051457236598785";
 
 /* typing */
-function typeText(text, cls){
-    const el = document.getElementById("statusText");
-    el.className = cls;
-    el.innerText = "";
+function typeText(text,cls){
+    const el=document.getElementById("statusText");
+    el.className=cls;
+    el.innerText="";
     let i=0;
-    const int = setInterval(()=>{
-        el.innerText += text[i];
+    const int=setInterval(()=>{
+        el.innerText+=text[i];
         i++;
-        if(i>=text.length) clearInterval(int);
-    },30);
+        if(i>=text.length)clearInterval(int);
+    },28);
 }
 
+/* status */
 function setStatus(s){
     document.getElementById("dot").className="dot "+s;
-    if(s==="online") typeText("Leon is online","online-text");
-    else if(s==="idle") typeText("Leon is idle","idle-text");
-    else if(s==="dnd") typeText("Leon is busy","dnd-text");
+
+    if(s==="online")typeText("Leon is online","online-text");
+    else if(s==="idle")typeText("Leon is idle","idle-text");
+    else if(s==="dnd")typeText("Leon is busy","dnd-text");
     else typeText("Leon is offline / hidden","offline-text");
 }
 
+/* background color from spotify */
+function setBg(img){
+    const c=document.createElement("canvas");
+    const ctx=c.getContext("2d");
+    c.width=50;c.height=50;
+    ctx.drawImage(img,0,0,50,50);
+
+    const d=ctx.getImageData(0,0,50,50).data;
+    let r=0,g=0,b=0,n=0;
+
+    for(let i=0;i<d.length;i+=20){
+        r+=d[i];g+=d[i+1];b+=d[i+2];n++;
+    }
+
+    r/=n;g/=n;b/=n;
+
+    document.getElementById("bg").style.background=
+        `radial-gradient(circle at center, rgba(${r},${g},${b},0.25), #0b0f14 70%)`;
+}
+
+/* load */
 async function load(){
-    const res = await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
-    const d = (await res.json()).data;
+    const res=await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
+    const d=(await res.json()).data;
 
-    document.getElementById("avatar").src =
-        `https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`;
+    const avatar=`https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`;
+    document.getElementById("avatar").src=avatar;
 
-    document.getElementById("name").innerText =
-        d.discord_user.global_name || d.discord_user.username;
+    document.getElementById("name").innerText=
+        d.discord_user.global_name||d.discord_user.username;
 
     setStatus(d.discord_status);
 
-    const sp = document.getElementById("spotify");
+    const sp=document.getElementById("spotify");
 
     if(d.listening_to_spotify){
-        const song = d.spotify.song;
-        const artist = d.spotify.artist;
-        const album = d.spotify.album;
-        const img = d.spotify.album_art_url;
+        const song=d.spotify.song;
+        const artist=d.spotify.artist;
+        const album=d.spotify.album;
+        const img=d.spotify.album_art_url;
 
-        const start = d.spotify.timestamps.start;
-        const end = d.spotify.timestamps.end;
+        const start=d.spotify.timestamps.start;
+        const end=d.spotify.timestamps.end;
 
-        sp.innerHTML = `
-            <div class="spotify">
-                <div class="sp-text">
-                    <a href="https://open.spotify.com/search/${encodeURIComponent(song)}" target="_blank">${song}</a>
-                    <a href="https://open.spotify.com/search/${encodeURIComponent(artist)}" target="_blank">${artist}</a>
-                    <a href="https://open.spotify.com/search/${encodeURIComponent(album)}" target="_blank">${album}</a>
-                    <div class="progress"><div class="progress-bar" id="bar"></div></div>
-                </div>
-                <img class="sp-img" src="${img}">
+        sp.innerHTML=`
+        <div class="spotify">
+            <div class="sp-text">
+                <a class="artist">${artist}</a>
+                <a class="song">${song}</a>
+                <a class="album">${album}</a>
+                <div class="progress"><div class="progress-bar" id="bar"></div></div>
             </div>
-        `;
+            <img class="sp-img" id="cover" src="${img}">
+        </div>`;
 
-        const bar = document.getElementById("bar");
+        const cover=document.getElementById("cover");
+        cover.onload=()=>setBg(cover);
+
+        const bar=document.getElementById("bar");
 
         setInterval(()=>{
-            const now = Date.now();
-            const percent = ((now - start)/(end - start))*100;
-            bar.style.width = percent+"%";
-        },1000);
-
-    } else {
-        sp.innerHTML="";
+            const now=Date.now();
+            const p=((now-start)/(end-start))*100;
+            bar.style.width=p+"%";
+        },500);
     }
 }
 
