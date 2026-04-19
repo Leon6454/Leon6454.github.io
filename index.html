@@ -7,104 +7,172 @@
 
 <style>
 :root{
-    --bg:#0b0f14;
+    --bg:#0a0d12;
+    --panel:#11161f;
+    --panel2:#0f141c;
+    --accent:#00ffc8;
+    --text:#ffffff;
+    --muted:#8b98a5;
 }
 
 *{
     box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    height: 100vh;
+body{
+    margin:0;
+    height:100vh;
+    background:var(--bg);
+    font-family:Arial,sans-serif;
+    color:var(--text);
+    overflow:hidden;
+    display:flex;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+    width:80px;
+    background:#0b0f14;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:12px 0;
+    gap:12px;
+    border-right:1px solid rgba(255,255,255,0.05);
+}
+
+.server{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.08);
     display:flex;
     justify-content:center;
     align-items:center;
-    background: var(--bg);
-    font-family: Arial, sans-serif;
-    color:white;
-    overflow:hidden;
+    cursor:pointer;
+    transition:.2s;
+    font-size:18px;
 }
 
-/* 🌫️ animated background */
-.bg {
+.server:hover{
+    transform:scale(1.1);
+    background:rgba(0,255,200,0.2);
+}
+
+/* ===== MAIN AREA ===== */
+.main{
+    flex:1;
+    display:flex;
+}
+
+/* ===== CHANNEL PANEL ===== */
+.channels{
+    width:200px;
+    background:var(--panel2);
+    padding:12px;
+    border-right:1px solid rgba(255,255,255,0.05);
+}
+
+.channel{
+    padding:10px;
+    border-radius:8px;
+    font-size:14px;
+    color:var(--muted);
+    cursor:pointer;
+    transition:.2s;
+}
+
+.channel:hover{
+    background:rgba(255,255,255,0.05);
+    color:white;
+}
+
+.channel.active{
+    background:rgba(0,255,200,0.1);
+    color:var(--accent);
+}
+
+/* ===== CONTENT ===== */
+.content{
+    flex:1;
+    padding:20px;
+    position:relative;
+}
+
+/* panels */
+.panel{
     position:absolute;
     width:100%;
     height:100%;
-    transition:1s ease;
-    background: radial-gradient(circle at center, rgba(0,255,200,0.08), transparent 60%);
-}
-
-/* ✨ card */
-.card {
-    position:relative;
-    z-index:2;
-    width:340px;
-    padding:25px;
-    border-radius:16px;
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.08);
-
-    text-align:center;
-
     opacity:0;
-    transform:translateY(10px) scale(0.98);
-    animation:fadeIn .8s ease forwards;
-
-    transition: transform .25s ease, box-shadow .25s ease;
-    will-change: transform;
+    transform:translateY(10px);
+    transition:.3s ease;
+    pointer-events:none;
 }
 
-/* 💀 3D hover depth */
-.card:hover{
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+.panel.active{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
 }
 
-@keyframes fadeIn{
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
+/* ===== PROFILE CARD ===== */
+.card{
+    width:320px;
+    background:var(--panel);
+    padding:20px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.06);
 }
 
-/* 👤 avatar */
-.pfp{
+/* avatar */
+.avatar-wrap{
+    position:relative;
+    width:90px;
+    height:90px;
+}
+
+.avatar{
     width:90px;
     height:90px;
     border-radius:50%;
-    margin-bottom:10px;
-    transition:.3s ease;
 }
 
-/* glow states */
-.online-glow{box-shadow:0 0 20px #2ecc71;}
-.idle-glow{box-shadow:0 0 20px #f1c40f;}
-.dnd-glow{box-shadow:0 0 20px #e74c3c;}
-.offline-glow{box-shadow:0 0 10px #7f8c8d;}
-
-h1{
-    margin:5px 0;
-    font-size:22px;
+/* glow ring */
+.ring{
+    position:absolute;
+    inset:-4px;
+    border-radius:50%;
+    border:2px solid transparent;
+    animation:pulse 2s infinite;
 }
 
-/* STATUS */
+@keyframes pulse{
+    0%{box-shadow:0 0 10px rgba(0,255,200,0.3);}
+    50%{box-shadow:0 0 20px rgba(0,255,200,0.7);}
+    100%{box-shadow:0 0 10px rgba(0,255,200,0.3);}
+}
+
+.name{
+    margin-top:10px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* status */
 .status{
     font-size:13px;
-    margin-bottom:10px;
+    color:var(--muted);
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:5px;
 }
-
-.online-text{color:#2ecc71;}
-.idle-text{color:#f1c40f;}
-.dnd-text{color:#e74c3c;}
-.offline-text{color:#7f8c8d;}
 
 .dot{
     width:8px;
     height:8px;
     border-radius:50%;
-    display:inline-block;
-    margin-right:6px;
 }
 
 .online{background:#2ecc71;}
@@ -112,214 +180,145 @@ h1{
 .dnd{background:#e74c3c;}
 .offline{background:#7f8c8d;}
 
-/* typing dots */
-.dots span{
-    display:inline-block;
-    width:4px;
-    height:4px;
-    margin:0 2px;
-    background:currentColor;
-    border-radius:50%;
-    animation:bounce 1.2s infinite ease-in-out;
-}
-
-.dots span:nth-child(2){animation-delay:.2s;}
-.dots span:nth-child(3){animation-delay:.4s;}
-
-@keyframes bounce{
-    0%,80%,100%{transform:translateY(0);}
-    40%{transform:translateY(-6px);}
-}
-
-/* 🎵 spotify */
+/* ===== SPOTIFY ===== */
 .spotify{
-    margin-top:12px;
+    margin-top:15px;
     display:flex;
-    align-items:center;
-    justify-content:space-between;
     gap:10px;
-    padding:10px 12px;
-    border-radius:12px;
-    background:rgba(255,255,255,0.03);
+    padding:10px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.04);
+}
+
+.spotify img{
+    width:50px;
+    height:50px;
+    border-radius:8px;
 }
 
 .sp-text{
-    text-align:left;
     font-size:12px;
-    line-height:1.35;
+    text-align:left;
 }
 
-/* hierarchy */
-.sp-text .artist{font-size:13px;font-weight:600;color:#fff;}
+.sp-text .artist{font-weight:bold;}
 .sp-text .song{color:#ccc;}
-.sp-text .album{font-size:11px;color:#888;}
+.sp-text .album{color:#888;font-size:11px;}
 
-.sp-text a{
-    text-decoration:none;
-    display:block;
-    transition:.2s ease;
-}
-
-.sp-text a:hover{
-    color:#00ffc8;
-}
-
-/* album */
-.sp-img{
-    width:52px;
-    height:52px;
-    border-radius:10px;
-    flex-shrink:0;
-}
-
-/* progress */
 .progress{
     height:3px;
-    margin-top:5px;
     background:rgba(255,255,255,0.1);
     border-radius:5px;
     overflow:hidden;
+    margin-top:5px;
 }
 
-.progress-bar{
+.bar{
     height:100%;
-    background:#00ffc8;
+    background:var(--accent);
     width:0%;
-    transition:width .5s linear;
+    transition:.3s;
 }
 
-/* 🔗 LINKS */
-.button{
+/* ===== LINKS ===== */
+.link{
     display:flex;
     align-items:center;
-    justify-content:center;
     gap:8px;
-
-    margin-top:10px;
     padding:12px;
+    margin-top:10px;
+    background:rgba(255,255,255,0.04);
     border-radius:10px;
-
     text-decoration:none;
     color:white;
-    font-size:14px;
-
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.15);
-
-    transition:.25s ease;
-    transform:translateZ(0);
+    transition:.2s;
 }
 
-/* hover depth */
-.button:hover{
-    transform:translateY(-3px) scale(1.02);
-    background:rgba(0,255,200,0.12);
-}
-
-/* icons */
-.icon{
-    opacity:.9;
-}
-
-/* main CTA */
-.main-btn{
-    background:linear-gradient(90deg,#00ffc8,#00bfff);
-    animation:pulse 2.5s infinite ease-in-out;
-}
-
-@keyframes pulse{
-    0%{box-shadow:0 0 10px rgba(0,255,200,0.4);}
-    50%{box-shadow:0 0 30px rgba(0,255,200,0.9);}
-    100%{box-shadow:0 0 10px rgba(0,255,200,0.4);}
-}
-
-/* 📱 mobile optimization */
-@media (max-width:420px){
-    .card{
-        width:92%;
-        padding:20px;
-    }
-
-    .spotify{
-        flex-direction:row;
-    }
+.link:hover{
+    transform:translateY(-2px);
+    background:rgba(0,255,200,0.15);
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg" id="bg"></div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <div class="server" onclick="switchTab(0)">👤</div>
+    <div class="server" onclick="switchTab(1)">🎵</div>
+    <div class="server" onclick="switchTab(2)">🔗</div>
+</div>
 
-<div class="card">
-    <img id="avatar" class="pfp">
-    <h1 id="name">Loading...</h1>
+<!-- MAIN -->
+<div class="main">
 
-    <div class="status">
-        <span id="dot" class="dot offline"></span>
-        <span id="statusText">Loading</span>
-        <span class="dots"><span></span><span></span><span></span></span>
+    <!-- CHANNEL LIST -->
+    <div class="channels">
+        <div class="channel active" onclick="switchTab(0)">Profile</div>
+        <div class="channel" onclick="switchTab(1)">Activity</div>
+        <div class="channel" onclick="switchTab(2)">Links</div>
     </div>
 
-    <div id="spotify"></div>
+    <!-- CONTENT -->
+    <div class="content">
 
-    <a class="button" href="https://www.roblox.com/users/1083628572/profile" target="_blank">
-        <span class="icon">🎮</span> Roblox
-    </a>
+        <!-- PROFILE -->
+        <div class="panel active">
+            <div class="card">
+                <div class="avatar-wrap">
+                    <div class="ring"></div>
+                    <img id="avatar" class="avatar">
+                </div>
 
-    <a class="button" href="https://github.com/Leon6454" target="_blank">
-        <span class="icon">💻</span> GitHub
-    </a>
+                <div class="name" id="name">Loading...</div>
 
-    <a class="button main-btn" href="https://discord.gg/jfzVYKyBPe" target="_blank">
-        <span class="icon">💬</span> Join Advertising Server
-    </a>
+                <div class="status">
+                    <div id="dot" class="dot offline"></div>
+                    <span id="statusText">Loading status</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="panel">
+            <div id="spotify"></div>
+        </div>
+
+        <!-- LINKS -->
+        <div class="panel">
+            <a class="link" href="https://github.com/Leon6454" target="_blank">💻 GitHub</a>
+            <a class="link" href="https://www.roblox.com/users/1083628572/profile" target="_blank">🎮 Roblox</a>
+            <a class="link" href="https://discord.gg/jfzVYKyBPe" target="_blank">💬 Discord Server</a>
+        </div>
+
+    </div>
 </div>
 
 <script>
 const USER_ID="618051457236598785";
 
-/* typing */
-function typeText(text,cls){
-    const el=document.getElementById("statusText");
-    el.className=cls;
-    el.innerText="";
-    let i=0;
-    const int=setInterval(()=>{
-        el.innerText+=text[i];
-        i++;
-        if(i>=text.length)clearInterval(int);
-    },28);
+/* tabs */
+function switchTab(i){
+    document.querySelectorAll(".channel").forEach((c,idx)=>{
+        c.classList.toggle("active",idx===i);
+    });
+
+    document.querySelectorAll(".panel").forEach((p,idx)=>{
+        p.classList.toggle("active",idx===i);
+    });
 }
 
 /* status */
 function setStatus(s){
-    document.getElementById("dot").className="dot "+s;
+    const dot=document.getElementById("dot");
 
-    if(s==="online")typeText("Leon is online","online-text");
-    else if(s==="idle")typeText("Leon is idle","idle-text");
-    else if(s==="dnd")typeText("Leon is busy","dnd-text");
-    else typeText("Leon is offline / hidden","offline-text");
-}
+    dot.className="dot "+s;
 
-/* background color from spotify */
-function setBg(img){
-    const c=document.createElement("canvas");
-    const ctx=c.getContext("2d");
-    c.width=50;c.height=50;
-    ctx.drawImage(img,0,0,50,50);
-
-    const d=ctx.getImageData(0,0,50,50).data;
-    let r=0,g=0,b=0,n=0;
-
-    for(let i=0;i<d.length;i+=20){
-        r+=d[i];g+=d[i+1];b+=d[i+2];n++;
-    }
-
-    r/=n;g/=n;b/=n;
-
-    document.getElementById("bg").style.background=
-        `radial-gradient(circle at center, rgba(${r},${g},${b},0.25), #0b0f14 70%)`;
+    if(s==="online")document.getElementById("statusText").innerText="Online";
+    else if(s==="idle")document.getElementById("statusText").innerText="Idle";
+    else if(s==="dnd")document.getElementById("statusText").innerText="Do Not Disturb";
+    else document.getElementById("statusText").innerText="Offline";
 }
 
 /* load */
@@ -327,11 +326,11 @@ async function load(){
     const res=await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
     const d=(await res.json()).data;
 
-    const avatar=`https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`;
-    document.getElementById("avatar").src=avatar;
+    document.getElementById("avatar").src=
+    `https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`;
 
     document.getElementById("name").innerText=
-        d.discord_user.global_name||d.discord_user.username;
+    d.discord_user.global_name||d.discord_user.username;
 
     setStatus(d.discord_status);
 
@@ -348,17 +347,14 @@ async function load(){
 
         sp.innerHTML=`
         <div class="spotify">
+            <img src="${img}">
             <div class="sp-text">
-                <a class="artist">${artist}</a>
-                <a class="song">${song}</a>
-                <a class="album">${album}</a>
-                <div class="progress"><div class="progress-bar" id="bar"></div></div>
+                <div class="artist">${artist}</div>
+                <div class="song">${song}</div>
+                <div class="album">${album}</div>
+                <div class="progress"><div class="bar" id="bar"></div></div>
             </div>
-            <img class="sp-img" id="cover" src="${img}">
         </div>`;
-
-        const cover=document.getElementById("cover");
-        cover.onload=()=>setBg(cover);
 
         const bar=document.getElementById("bar");
 
