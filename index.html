@@ -27,7 +27,7 @@ body {
 .card {
     position: relative;
     z-index: 2;
-    width: 320px;
+    width: 340px;
     padding: 25px;
     border-radius: 14px;
     background: rgba(255,255,255,0.04);
@@ -50,7 +50,7 @@ h1 {
 /* STATUS */
 .status {
     font-size: 13px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .online-text { color: #2ecc71; }
@@ -59,25 +59,21 @@ h1 {
 .offline-text { color: #7f8c8d; }
 
 .dot {
-    display: inline-block;
     width: 8px;
     height: 8px;
     border-radius: 50%;
+    display: inline-block;
     margin-right: 6px;
 }
 
-.online { background: #2ecc71; box-shadow: 0 0 10px #2ecc71; }
-.idle { background: #f1c40f; box-shadow: 0 0 10px #f1c40f; }
-.dnd { background: #e74c3c; box-shadow: 0 0 10px #e74c3c; }
-.offline { background: #7f8c8d; box-shadow: 0 0 10px #7f8c8d; }
+.online { background: #2ecc71; }
+.idle { background: #f1c40f; }
+.dnd { background: #e74c3c; }
+.offline { background: #7f8c8d; }
 
-/* bouncing dots */
-.dots {
-    display: inline-flex;
-    margin-left: 5px;
-}
-
+/* typing dots */
 .dots span {
+    display: inline-block;
     width: 4px;
     height: 4px;
     margin: 0 2px;
@@ -85,64 +81,68 @@ h1 {
     border-radius: 50%;
     animation: bounce 1.2s infinite;
 }
-
-.dots span:nth-child(2) { animation-delay: 0.2s; }
-.dots span:nth-child(3) { animation-delay: 0.4s; }
+.dots span:nth-child(2){animation-delay:0.2s;}
+.dots span:nth-child(3){animation-delay:0.4s;}
 
 @keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-6px); }
+    0%,80%,100%{transform:translateY(0);}
+    40%{transform:translateY(-6px);}
 }
 
-/* 🎵 Spotify section */
-.spotify {
+/* BUTTONS */
+.button {
+    display: block;
     margin-top: 10px;
-    font-size: 13px;
-    color: #aaa;
-}
-
-.spotify a {
-    display: inline-block;
-    margin: 5px 5px 0;
-    padding: 6px 10px;
-    font-size: 12px;
-    border-radius: 6px;
+    padding: 12px;
+    border-radius: 8px;
     text-decoration: none;
     color: white;
+    font-size: 14px;
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.15);
     transition: 0.2s;
 }
 
-.spotify a:hover {
+.button:hover {
     background: rgba(0,255,200,0.15);
+    transform: translateY(-2px);
 }
 
-/* 🔥 MAIN BUTTON */
-.button {
-    display: block;
-    margin-top: 18px;
-    padding: 14px;
-    border-radius: 10px;
-    text-decoration: none;
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
+/* MAIN CTA */
+.main-btn {
     background: linear-gradient(90deg, #00ffc8, #00bfff);
     box-shadow: 0 0 15px rgba(0,255,200,0.5);
     animation: pulse 2s infinite;
-    transition: 0.2s;
 }
 
-.button:hover {
-    transform: scale(1.08);
-}
-
-/* pulse animation */
 @keyframes pulse {
     0% { box-shadow: 0 0 10px rgba(0,255,200,0.4); }
     50% { box-shadow: 0 0 25px rgba(0,255,200,0.9); }
     100% { box-shadow: 0 0 10px rgba(0,255,200,0.4); }
+}
+
+/* SPOTIFY */
+.spotify {
+    margin-top: 15px;
+}
+
+.spotify img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.progress {
+    height: 5px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 6px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: #00ffc8;
+    width: 0%;
 }
 </style>
 </head>
@@ -157,15 +157,23 @@ h1 {
 
     <div class="status">
         <span id="dot" class="dot offline"></span>
-        <span id="statusText" class="offline-text">Loading</span>
+        <span id="statusText">Loading</span>
         <span class="dots"><span></span><span></span><span></span></span>
     </div>
 
-    <!-- Spotify -->
+    <!-- SPOTIFY -->
     <div id="spotify" class="spotify"></div>
 
-    <!-- MAIN CTA -->
-    <a class="button" href="https://discord.gg/jfzVYKyBPe" target="_blank">
+    <!-- LINKS -->
+    <a class="button" href="https://www.roblox.com/users/1083628572/profile" target="_blank">
+        Roblox Profile
+    </a>
+
+    <a class="button" href="https://github.com/Leon6454" target="_blank">
+        GitHub
+    </a>
+
+    <a class="button main-btn" href="https://discord.gg/jfzVYKyBPe" target="_blank">
         Join Advertising Server
     </a>
 </div>
@@ -174,70 +182,65 @@ h1 {
 const USER_ID = "618051457236598785";
 
 /* typing */
-function typeText(text, className) {
+function typeText(text, cls){
     const el = document.getElementById("statusText");
-    el.className = className;
+    el.className = cls;
     el.innerText = "";
-
-    let i = 0;
-    const interval = setInterval(() => {
+    let i=0;
+    const int = setInterval(()=>{
         el.innerText += text[i];
         i++;
-        if (i >= text.length) clearInterval(interval);
-    }, 30);
+        if(i>=text.length) clearInterval(int);
+    },30);
 }
 
-/* status */
-function setStatus(status) {
-    const dot = document.getElementById("dot");
-    dot.className = "dot " + status;
-
-    if (status === "online") typeText("Leon is online", "online-text");
-    else if (status === "idle") typeText("Leon is idle", "idle-text");
-    else if (status === "dnd") typeText("Leon is busy", "dnd-text");
-    else typeText("Leon is offline / hidden", "offline-text");
+function setStatus(s){
+    document.getElementById("dot").className="dot "+s;
+    if(s==="online") typeText("Leon is online","online-text");
+    else if(s==="idle") typeText("Leon is idle","idle-text");
+    else if(s==="dnd") typeText("Leon is busy","dnd-text");
+    else typeText("Leon is offline / hidden","offline-text");
 }
 
-/* load */
-async function load() {
-    try {
-        const res = await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
-        const json = await res.json();
-        const d = json.data;
+async function load(){
+    const res = await fetch(`https://api.lanyard.rest/v1/users/${USER_ID}`);
+    const d = (await res.json()).data;
 
-        // avatar
-        const avatar = d.discord_user.avatar
-            ? `https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`
-            : `https://cdn.discordapp.com/embed/avatars/0.png`;
+    document.getElementById("avatar").src =
+        `https://cdn.discordapp.com/avatars/${USER_ID}/${d.discord_user.avatar}.png`;
 
-        document.getElementById("avatar").src = avatar;
+    document.getElementById("name").innerText =
+        d.discord_user.global_name || d.discord_user.username;
 
-        // name
-        document.getElementById("name").innerText =
-            d.discord_user.global_name || d.discord_user.username;
+    setStatus(d.discord_status);
 
-        // status
-        setStatus(d.discord_status);
+    const sp = document.getElementById("spotify");
 
-        // spotify
-        const sp = document.getElementById("spotify");
-        if (d.listening_to_spotify) {
-            const song = d.spotify.song;
-            const artist = d.spotify.artist;
-            const url = `https://open.spotify.com/search/${encodeURIComponent(song + " " + artist)}`;
+    if(d.listening_to_spotify){
+        const song = d.spotify.song;
+        const artist = d.spotify.artist;
+        const album = d.spotify.album_art_url;
+        const start = d.spotify.timestamps.start;
+        const end = d.spotify.timestamps.end;
 
-            sp.innerHTML = `
-                Listening to:
-                <br>
-                <a href="${url}" target="_blank">${song}</a>
-                <a href="${url}" target="_blank">${artist}</a>
-            `;
-        } else {
-            sp.innerHTML = "";
-        }
+        sp.innerHTML = `
+            <img src="${album}">
+            <br>
+            <a class="button" href="https://open.spotify.com/search/${encodeURIComponent(song)}" target="_blank">${song}</a>
+            <a class="button" href="https://open.spotify.com/search/${encodeURIComponent(artist)}" target="_blank">${artist}</a>
+            <div class="progress"><div class="progress-bar" id="bar"></div></div>
+        `;
 
-    } catch {
-        document.getElementById("statusText").innerText = "offline";
+        const bar = document.getElementById("bar");
+
+        setInterval(()=>{
+            const now = Date.now();
+            const percent = ((now - start)/(end - start))*100;
+            bar.style.width = percent+"%";
+        },1000);
+
+    } else {
+        sp.innerHTML="";
     }
 }
 
